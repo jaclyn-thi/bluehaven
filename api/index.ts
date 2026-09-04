@@ -43,8 +43,22 @@ app.all("*", (req, res) => {
   });
 });
 
-void connectDb().then(() => {
-  app.listen(PORT, () => {
-    console.log("Started listening on port", PORT);
+// void connectDb().then(() => {
+//   app.listen(PORT, () => {
+//     console.log("Started listening on port", PORT);
+//   });
+// });
+
+if (process.env.VERCEL) {
+  // Vercel manages the HTTP server for us.
+  void connectDb();
+} else {
+  // Start a traditional server when running locally.
+  void connectDb().then(() => {
+    app.listen(PORT, () => {
+      console.log("Started listening on port", PORT);
+    });
   });
-});
+}
+
+export default app;
